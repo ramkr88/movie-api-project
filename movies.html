@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Search</title>
+  <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>🎬 Movie Search</h1>
+
+    <div class="search-box">
+      <input type="text" id="movie" placeholder="Enter movie name">
+      <button onclick="searchMovie()">Search</button>
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    async function searchMovie() {
+      const movie = document.getElementById("movie").value;
+
+      const response = await fetch(
+  "https://www.omdbapi.com/?s=" + movie + "&apikey=ef489c13"
+);
+
+
+      const data = await response.json();
+
+      if (data.Response === "True") {
+  document.getElementById("result").innerHTML = data.Search
+    .map(movie => `
+      <div class="movie-card">
+        <img src="${movie.Poster !== 'N/A' ? movie.Poster : ''}" width="100">
+        <div>
+          <h3>${movie.Title}</h3>
+          <p>Year: ${movie.Year}</p>
+        </div>
+      </div>
+    `)
+    .join("");
+} else {
+  document.getElementById("result").innerText = "Movie not found";
+}
+
+    }
+  </script>
+
+</body>
+</html>
